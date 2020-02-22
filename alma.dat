@@ -1,0 +1,33 @@
+!
+! ALMA configuration file
+!
+! Initial version DM 18.02.2020
+!
+!
+! ~~~~~~~~~~~~~~~~~~~~~
+! # General parameters
+! ~~~~~~~~~~~~~~~~~~~~~
+!
+ 256                        ! number of digits
+ 8                          ! order of the Gaver sequence
+!
+ Loading                    ! LN type ('Loading' or 'Tidal')
+!
+ 2                          ! Minimum degree
+ 20                         ! Maximum degree
+ 1                          ! Step
+!
+!
+ Lin                        ! Time scale ('log' / 'lin')
+ 0                          ! Time points (minus one)
+ 2 2                        ! Time range  (10^(m1:m2) kyrs)
+!
+!                           Rheological profile
+!
+ 1                          ! Number of mantle layers
+ rheological_profiles/GS00.dat
+!
+!
+!
+!
+!
