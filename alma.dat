@@ -18,9 +18,9 @@
  1                          ! Step
 !
 !
- Lin                        ! Time scale ('log' / 'lin')
+ log                        ! Time scale ('log' / 'lin')
  0                          ! Time points (minus one)
- 2 2                        ! Time range  (10^(m1:m2) kyrs)
+ -5 -5                        ! Time range  (10^(m1:m2) kyrs)
 !
 !                           Rheological profile
 !
@@ -28,6 +28,17 @@
  rheological_profiles/GS00.dat
 !
 !
+! Log file
+alma-test.log
+!
+!
+! Output files
+!
+ln_vs_n                       ! Output file format (LNs vs t or LNs vs n)
+!
+h.dat
+l.dat
+k.dat
 !
 !
 !

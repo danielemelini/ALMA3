@@ -54,6 +54,24 @@ implicit none
  call read_data_line(90,buffer)  ;   read(buffer,*) nla
  call read_data_line(90,buffer)  ;   file_rheol = adjustl(trim(buffer))
 !
+ call read_data_line(90,buffer)  ;   file_log   = adjustl(trim(buffer))
+!
+ call read_data_line(90,buffer)  ;   read(buffer,*) cjunk
+ cjunk=to_uppercase(cjunk)
+ if( trim(adjustl(cjunk)) == 'LN_VS_N' ) then
+    ifmt=1
+ elseif( trim(adjustl(cjunk)) == 'LN_VS_T' ) then
+    ifmt=2
+ else
+    write(*,*) " - ERROR: Unknown output format '"//trim(adjustl(cjunk))//"'"
+	stop
+ end if
+!
+!
+ call read_data_line(90,buffer)  ;   file_h     = adjustl(trim(buffer))
+ call read_data_line(90,buffer)  ;   file_l     = adjustl(trim(buffer))
+ call read_data_line(90,buffer)  ;   file_k     = adjustl(trim(buffer))
+!
 !
 !---------------------------------------------- Write cfg info to logfile
  !write(99,*) ' Numerical precision is ',nd

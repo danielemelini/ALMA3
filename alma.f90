@@ -22,6 +22,12 @@ integer :: p                        ! Number of times minus one
 type(fm), allocatable :: zeta(:)    ! Salzer weights
 !
 character(100) :: file_rheol        ! File with rheological model
+character(100) :: file_h            ! File for 'h' LN
+character(100) :: file_l            ! File for 'l' LN
+character(100) :: file_k            ! File for 'k' LN
+character(100) :: file_log          ! Log file
+!
+integer :: ifmt                     ! Output file format ('1'->LN vs n, '2'->LN vs t)
 !
 end module
 !
@@ -62,8 +68,6 @@ implicit none
 !
  character(100) :: cfg_f              ! Configuration file from cmd-line
 !
- character(50), parameter :: alma_log='alma.log'
-!
  integer :: i,j,k
  integer :: it, ik, idx
  type(fm) :: s
@@ -73,11 +77,19 @@ implicit none
  type(fm), allocatable :: h_love(:,:), l_love(:,:), k_love(:,:)
  type(fm) :: f
 !
+ real(4) :: time_0, time_1, time_2 
+ logical :: file_exists
+ integer :: iu
+ character, parameter :: ch(3)= (/ 'h', 'l', 'k' /)
+ character(50) :: timestamp
+ integer(8) :: idate(8)
 !
 !
 !
 !
 !
+!
+ call print_logo
 !
  write(*,*) ''
  write(*,*) ' ****'
@@ -87,8 +99,27 @@ implicit none
  write(*,*) ''
 !
 !
+!---------------------------------------------- Check command line arguments
+!
+ if (iargc().ne.1) then
+    write(*,*) ' - USAGE: alma.exe <configuration_file> '
+    write(*,*) ''
+    stop
+ end if
+!
+!---------------------------------------------- Obtain initial time-mark
+ call cpu_time(time_0)
+!
 !---------------------------------------------- Open and read configuration file
  call getarg(1,cfg_f)
+!
+ inquire(file=trim(cfg_f), exist=file_exists)
+ if( .not. file_exists ) then
+     write(*,*) " - ERROR: configuration file '"//trim(cfg_f)//"' does not exist."
+     write(*,*) ""
+     stop
+ end if
+!
  open(90,file=trim(cfg_f),status='old')
 !
  write(*,*) ' - Parsing configuration file: ', trim(cfg_f)
@@ -107,8 +138,8 @@ implicit none
 !
 !
 !---------------------------------------------- Initialize the multi-precision package
- write(*,*) " - Opening the log file '"//trim(alma_log)//"'"
- open(99,file=trim(alma_log),status='unknown')
+ write(*,*) " - Opening the log file '"//trim(file_log)//"'"
+ open(99,file=trim(file_log),status='unknown')
 !
 !
 !---------------------------------------------- Build the rheological model
@@ -125,15 +156,14 @@ implicit none
  write(*,*) ' - Building the time steps'
 !
  call time_steps
-!
-!
-!
+ call write_log(3)
 !
 !
 !---------------------------------------------- Compute the LNs
 !
  call salzer_weights
 !
+ call cpu_time(time_1)
 !
  ndeg = 0
  do n=lmin,lmax,lstep
@@ -152,70 +182,114 @@ implicit none
 ! 
  do n=lmin,lmax,lstep
 !
- write(*,*) ' - Harmonic degree n = ',n 
+    idx = idx+1
 !
- idx = idx+1
+    do it=1,p+1
 !
- do it=1,p+1
-!
- f = log( to_fm('2') ) / t(it) 
+       f = log( to_fm('2') ) / t(it) 
 ! 
- do ik=1,2*order
+       do ik=1,2*order
 !
- s = f * to_fm(ik)
+         s = f * to_fm(ik)
 !
- call love_numbers(n,s,hh,ll,kk)
+         call love_numbers(n,s,hh,ll,kk)
 !
- h_love(idx,it) = h_love(idx,it) + hh * zeta(ik) * f
- l_love(idx,it) = l_love(idx,it) + ll * zeta(ik) * f
- k_love(idx,it) = k_love(idx,it) + kk * zeta(ik) * f 
+         h_love(idx,it) = h_love(idx,it) + hh * zeta(ik) * f
+         l_love(idx,it) = l_love(idx,it) + ll * zeta(ik) * f
+         k_love(idx,it) = k_love(idx,it) + kk * zeta(ik) * f 
 ! 
+      end do
+! 
+   end do
+!
+   call cpu_time(time_2)
+!
+   write(*,*) ' - Harmonic degree n = ',n,'(',time_2-time_1,'s)' 
+   time_1 = time_2
+!
  end do
-! 
+!
+!
+!---------------------------------------------- Writing outputs
+ write(*,*) " - Writing output files '"//trim(file_h)//"', '"// & 
+           trim(file_l)//"', '"//trim(file_k)//"'"
+!
+ call date_and_time(values=idate)
+ write(timestamp,'(i4,2(a1,i2.2),1x,i2.2,2(a1,i2.2))') &
+    idate(1),'-',idate(2),'-',idate(3), &
+    idate(5),':',idate(6),':',idate(7)
+!
+ open(71,file=trim(file_h),status='unknown')
+ open(72,file=trim(file_l),status='unknown')
+ open(73,file=trim(file_k),status='unknown')
+!
+ do iu=71,73 
+    write(iu,'(a)') '# ---------------------------------------------------------' 
+    if(iload==0) write(iu,'(a)') '# '//ch(iu-70)//' tidal Love number '
+    if(iload==1) write(iu,'(a)') '# '//ch(iu-70)//' load Love number '
+    write(iu,'(a)') '# Created by ALMA on '//trim(timestamp)
+    write(iu,'(a)') '# ----------------------------------------------------------' 
+    write(iu,'(a)') '# '  
  end do
 !
- end do
 !
- idx=0
+ if( ifmt==1 ) then
+!
+   idx=0
 ! 
- do n=lmin,lmax,lstep
+   do n=lmin,lmax,lstep
 !
- idx = idx + 1
+      idx = idx + 1
 !
- do it=1,p+1
-    print *,n,it, to_dp(h_love(idx,it)), &
-	              to_dp(l_love(idx,it)), &
-				  to_dp(k_love(idx,it))
- end do
+      write(71,'(i4,1x,3048(e19.8))') n,(to_dp(h_love(idx,it)),it=1,p+1) 
+      write(72,'(i4,1x,3048(e19.8))') n,(to_dp(l_love(idx,it)),it=1,p+1) 
+      write(73,'(i4,1x,3048(e19.8))') n,(to_dp(k_love(idx,it)),it=1,p+1) 
+!
+   end do
+!
+ elseif( ifmt==2 ) then
+!
+   do it=1,p+1
+!  
+      write(71,'(3048(e19.8))') to_dp(t(it)),(to_dp(h_love(idx,it)),idx=1,ndeg) 
+      write(72,'(3048(e19.8))') to_dp(t(it)),(to_dp(l_love(idx,it)),idx=1,ndeg) 
+      write(73,'(3048(e19.8))') to_dp(t(it)),(to_dp(k_love(idx,it)),idx=1,ndeg) 
+!
+   end do
+!
+ end if
 ! 
- end do
-! 
- 
-
+ close(71)
+ close(72)
+ close(73) 
 !
 !
-! n = 20
-! s = to_fm('0.5')
-! call love_numbers(n,s,hh,ll,kk)
-! print *, to_dp(hh)
-! print *, to_dp(ll)
-! print *, to_dp(kk)
+!---------------------------------------------- Close the log file
+!
+ write(*,*) " - Closing the log file '"//trim(file_log)//"'"
+ close(99)
 ! 
 !
 !
-! j=5
-! call surface_bc(5,r(nla+2),gra(nla+2),b)
-! do i=1,3
-!     print *,to_dp(b(i))
-!end do
+!---------------------------------------------- Release dynamic arrays
 !
-! j=5
-! call direct_matrix(j,r(2),rho(2),mu(2),gra(2),YYd)
-! call inverse_matrix(j,r(2),rho(2),mu(2),gra(2),YYi)
-! YY = matmul(YYd,YYi)
-! do i=1,6
-!    print *, (to_dp(YY(i,j)),j=1,6)
-! end do
+ deallocate(t)
+ deallocate(h_love)
+ deallocate(l_love)
+ deallocate(k_love)
+ deallocate(r)
+ deallocate(rho)
+ deallocate(mu)
+ deallocate(eta)
+ deallocate(irheol)
+! 
+!
+!
+!---------------------------------------------- All done
+!
+ call cpu_time(time_1)
+ write(*,*) ' - ALMA job completed. Time elapsed: ',time_1-time_0,'s'
+ write(*,*) ''
 !
 !
 !

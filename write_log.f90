@@ -194,10 +194,26 @@ implicit none
 !
 !
 !
+ if (imode==3) then
+!
+ write(99,*) ' '
+!
+    if( itime==0 ) then
+        write(99,*) ' Time scale is LINEAR' 
+    elseif( itime==1 ) then
+        write(99,*) ' Time scale is LOGARITHMIC' 
+    end if
+    write(99,*) ' '
+    write(99,*) ' Time points (kyr):' 
+    do i=1,p+1
+         write(99,*) ' ', i, ':', to_sp(t(i))
+    end do
+ 
+end if
 !
 !
-
-
-
+!
+!
+!
 !
 end subroutine write_log

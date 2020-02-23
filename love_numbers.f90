@@ -48,7 +48,16 @@ integer  :: indx(3)
 !
 ! ---- Compute the boundary conditions
 !
- call fluid_core_bc (n,r(1),rho(0),gra(1),bc)
+ if( irheol(0)==0 ) then
+    call fluid_core_bc (n,r(1),rho(0),gra(1),bc)
+ else
+    call complex_rigidity(s,mu(0),eta(0),irheol(0),mu_s)
+    call direct_matrix (n,r(1),rho(0),mu_s,gra(1),Ydir) 
+    bc(:,1) = Ydir(:,1)
+    bc(:,2) = Ydir(:,2)
+    bc(:,3) = Ydir(:,3)    
+ end if
+! 
  call surface_bc    (n,r(nla+2),gra(nla+2),bs)
 !
 !

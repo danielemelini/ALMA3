@@ -18,7 +18,8 @@ ALMA_OBJS=alma.o \
 	  love_numbers.o \
 	  complex_rigidity.o \
 	  lu.o \
-	  salzer_weights.o
+	  salzer_weights.o \
+          print_logo.o
 #
 FMLIB_OBJS=fmsave.o fm.o fmzm90.o
 #
