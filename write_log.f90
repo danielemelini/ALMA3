@@ -7,7 +7,7 @@ implicit none
  integer :: i
  integer :: onefound, densiv
 !
- character(10) :: lab(0:2) = (/ 'Fluid     ', 'Elastic   ', 'Maxwell   ' /)
+ character(10) :: lab(0:3) = (/ 'Fluid     ', 'Elastic   ', 'Maxwell   ', 'Newton    ' /)
 !
 !
  if( imode==1 ) then

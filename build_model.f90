@@ -55,6 +55,8 @@ implicit none
          irheol(i)=1
      elseif (code=='MAX') then
          irheol(i)=2
+     elseif (code=='NEW') then
+         irheol(i)=3
      else
          write(*,*) " - ERROR: Rheology '"//trim(buffer(5))//"' is unknown."
          stop
