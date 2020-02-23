@@ -1,12 +1,19 @@
 !
-! ALMA configuration file
 !
-! Initial version DM 18.02.2020
+!   +- - - - - - - - - - - - - - - - - - - -  +
+!   |+-------------------------------------- +| 
+!   ||                                       ||
+!   ||      Configuration file for ALMA      ||
+!   ||                                       ||
+!   |+---------------------------------------+|
+!   +- - - - - - - - - - - - - - - - - - - - -+
+!
+!   Initial version DM 18.02.2020
 !
 !
-! ~~~~~~~~~~~~~~~~~~~~~
-! # General parameters
-! ~~~~~~~~~~~~~~~~~~~~~
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! 1) General parameters
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !
  256                        ! number of digits
  8                          ! order of the Gaver sequence
@@ -17,28 +24,31 @@
  20                         ! Maximum degree
  1                          ! Step
 !
-!
- log                        ! Time scale ('log' / 'lin')
+ log                        ! Time scale ( 'log' or 'lin')
  0                          ! Time points (minus one)
- -5 -5                        ! Time range  (10^(m1:m2) kyrs)
+ -5 -5                      ! Time range  (10^(m1:m2) kyrs)
 !
-!                           Rheological profile
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! 2) Rheological profile
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !
- 1                          ! Number of mantle layers
- rheological_profiles/GS00.dat
+ 1                                ! Number of mantle layers
+ rheological_profiles/GS00.dat    ! File with rheological profile
+!
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! 3) Outputs
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!
+ alma.log                         ! Log file name
+!
+ ln_vs_n                          ! Output file layout. Possible options:
+!                                 ! ln_vs_n: one line per harmonic degree
+!                                 ! ln_vs_t: one line per time step
+!
+ h.dat                            ! Output file for 'h' LN
+ l.dat                            ! Output file for 'l' LN
+ k.dat                            ! Output file for 'k' LN
 !
 !
-! Log file
-alma-test.log
 !
-!
-! Output files
-!
-ln_vs_n                       ! Output file format (LNs vs t or LNs vs n)
-!
-h.dat
-l.dat
-k.dat
-!
-!
-!
+! ######################## End of configuration file ########################
