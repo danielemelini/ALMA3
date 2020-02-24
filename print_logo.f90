@@ -1,7 +1,16 @@
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+! subroutine 'print_logo'
+! prints a fancy logo in the header of the ALMA run
+!
+! Initial version DM February 24, 2020
+!
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+!
+!
 subroutine print_logo
 implicit none
-!
-!
 !
 !
 write(*,*) '                                                     ___'

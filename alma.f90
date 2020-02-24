@@ -1,4 +1,22 @@
 !
+! ALMA
+! the plAnetary Love nuMbers cAlculator
+!
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+! Copyright (C) 2020 Daniele Melini
+!
+! Based on a re-writing of ALMA 2.2
+! Initial version February 24, 2020
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+!
+!
+! +-------------------------------+
+! |   MODULE GENERAL_PARAMETERS   |
+! +-------------------------------+
+!
+! Stores a number of parameters used throughout alma routines
+!
 module general_parameters
 use fmzm
 implicit none 
@@ -31,6 +49,14 @@ integer :: ifmt                     ! Output file format ('1'->LN vs n, '2'->LN 
 !
 end module
 !
+!
+!
+! +--------------------------------+
+! |   MODULE RHEOLOGICAL_PROFILE   |
+! +--------------------------------+
+!
+! Stores a information about the rheological model
+!
 module rheological_profile
 use fmzm
 implicit none
@@ -58,6 +84,11 @@ integer, allocatable :: irheol(:)   ! Rheology
 end module
 !
 !
+! ##################################################################
+! #                                                                #
+! #                          MAIN PROGRAM                          #
+! #                                                                #
+! ##################################################################
 !
 program alma
 use fmzm
@@ -86,7 +117,7 @@ implicit none
 !
 !
 !
-!
+! ########################## Execution starts here ##########################
 !
 !
  call print_logo
@@ -210,7 +241,8 @@ implicit none
  end do
 !
 !
-!---------------------------------------------- Writing outputs
+!---------------------------------------------- Write outputs
+!
  write(*,*) " - Writing output files '"//trim(file_h)//"', '"// & 
            trim(file_l)//"', '"//trim(file_k)//"'"
 !
@@ -294,3 +326,4 @@ implicit none
 !
 !
 end
+!

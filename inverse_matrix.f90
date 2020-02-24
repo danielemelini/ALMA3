@@ -1,3 +1,14 @@
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+! subroutine 'inverse_matrix'
+! computes the inverse of the fundamental matrix in a layer
+!
+! Initial version DM February 24, 2020
+!
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+!
+!
 subroutine inverse_matrix(n,r,rho,mu,gra,Yinv)
 use fmzm
 use general_parameters

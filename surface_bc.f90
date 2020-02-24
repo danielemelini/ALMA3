@@ -1,3 +1,14 @@
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+! subroutine 'surface_bc'
+! computes the boundary conditions at the surface
+!
+! Initial version DM February 24, 2020
+!
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+!
+!
 subroutine surface_bc(n,r,gra,bs)
 use fmzm
 use general_parameters

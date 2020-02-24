@@ -1,3 +1,15 @@
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+! subroutine 'salzer_weights'
+! computes the weights zeta(i) to be used in the Salzer accelerated 
+! Post-Widder Laplace inversions scheme
+!
+! Initial version DM February 24, 2020
+!
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+!
+!
 subroutine salzer_weights
 use fmzm
 use general_parameters

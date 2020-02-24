@@ -1,3 +1,14 @@
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+! subroutine 'fluid_core_bd'
+! computes the boundary conditions at the CMB for a fluid inviscid core
+!
+! Initial version DM February 24, 2020
+!
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+!
+!
 subroutine fluid_core_bc(n,r,rho,gra,b)
 use fmzm
 use general_parameters

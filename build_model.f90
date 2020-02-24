@@ -1,3 +1,14 @@
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+! subroutine 'build_model'
+! reads the rheology file and computes some derived quantities
+!
+! Initial version DM February 24, 2020
+!
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+!
+!
 subroutine build_model
 use rheological_profile
 use general_parameters
@@ -14,6 +25,7 @@ implicit none
 ! ----- Open the model file
  open(10,file=trim(file_rheol),status='old')
 !
+! ----- Verify if the number of lines is consistent with the number of layers
  call count_rows(10,n)
  if( n.ne.(nla+2+nh) ) then
     write(*,*) " - ERROR: Number of rows in '"//trim(file_rheol)//"' is not consistent with"
@@ -27,6 +39,7 @@ implicit none
     read(10,*)
  end do
 ! 
+! ----- Allocate dynamic arrays
  allocate(r  (0:nla+2))
  allocate(gra(0:nla+2))
  allocate(rho(0:nla+1))
@@ -35,6 +48,9 @@ implicit none
  allocate(irheol(0:nla+1))
 !
  allocate(mlayer(0:nla+1))
+!
+!
+! ----- Read the rheology file
 !
  r(0)=to_fm('0.0')
 !
@@ -68,7 +84,7 @@ implicit none
 !
 !
 !
-! -------- Mass of the planet
+! ----- Compute mass of the planet
 !
  mlayer(0) = rho(0) * r(1)**3
  do i=1,nla+1
@@ -79,7 +95,7 @@ implicit none
  mass = sum(mlayer)
 !
 !
-! ------- Gravity at the interface boundaries
+! ----- Compute gravity at the interface boundaries
 !
  gra(0)=to_fm('0.0')
  do i=1, nla+2

@@ -1,12 +1,16 @@
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
-!  This file is part of SELEN4
+! subroutine 'read_data_line'
+! Reads from file opened at LUN the next line not starting with '!' or '#'
+!
+! Initial version DM February 24, 2020
+!
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+!
 !
     subroutine read_data_line(lun,buffer)
     implicit none
-!
-! --- Reads from file opened at LUN the next line not starting with '!' or '#'
-!     DM 15.01.2016
-!
     character(*)   :: buffer
     character :: ch
     integer :: lun

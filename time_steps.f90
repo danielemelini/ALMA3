@@ -1,9 +1,17 @@
- subroutine time_steps
-! 
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+! subroutine 'surface_bc'
 ! Generates p+1 time points between t=10^{M1} and t=10^{M2} kyrs according to 
 ! linearly or logarithmically spaced scales. Love numbers will be computed at
 ! these time steps. 
 !
+! Initial version DM February 24, 2020
+!
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+!
+!
+ subroutine time_steps
  use fmzm
  use general_parameters
  implicit none
