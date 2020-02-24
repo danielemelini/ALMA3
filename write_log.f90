@@ -21,6 +21,37 @@ implicit none
  character(10) :: lab(0:3) = (/ 'Fluid     ', 'Elastic   ', 'Maxwell   ', 'Newton    ' /)
 !
 !
+!
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+! | MODE=0 : General parameters                         |
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
+ if( imode==0 ) then
+!
+ write(99,*) ' '
+ write(99,*) ' -------------'
+ write(99,*) ' ALMA log file'
+ write(99,*) ' -------------'
+!
+ write(99,*) ' '
+ write(99,*) ' Number of significant digits set to: ',nd
+ write(99,*) ' '
+ write(99,*) ' Order of the Salzer accelerated sequence: ',order
+ write(99,*) ' '
+ write(99,*) ' Harmonic degrees (min/max/step): ',lmin, lmax, lstep
+ write(99,*) ' '
+! 
+ if (iload==0) write(99,*) ' Requested Love numbers are of the TIDAL type'
+ if (iload==1) write(99,*) ' Requested Love numbers are of the LOADING type'
+!
+!
+ end if
+!
+!
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+! | MODE=1 : Un-normalized rheological profile          |
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
  if( imode==1 ) then
 !
  write(99,*) ' '
@@ -125,6 +156,11 @@ implicit none
  end if
 !
 !
+!
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+! | MODE=2 : Normalized rheological profile             |
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+!
  if( imode==2 ) then
 !
 !
@@ -200,10 +236,13 @@ implicit none
  write(99,*) ' ', i, ':', to_sp((r(i)*r0))/1000, to_sp(gra(i)), '(External surface)'	 
 !
 !
-!
  end if
 !
 !
+!
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+! | MODE=3 : Time steps                                 |
+! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
  if (imode==3) then
 !

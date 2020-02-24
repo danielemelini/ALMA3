@@ -168,9 +168,10 @@ implicit none
  Gnt = to_fm('6.674e-11')
 !
 !
-!---------------------------------------------- Initialize the multi-precision package
+!---------------------------------------------- Open the log file
  write(*,*) " - Opening the log file '"//trim(file_log)//"'"
  open(99,file=trim(file_log),status='unknown')
+ call write_log(0)
 !
 !
 !---------------------------------------------- Build the rheological model
