@@ -5,6 +5,7 @@
 ! a given value of s
 !
 ! Initial version DM February 24, 2020
+! Modified DM June 11, 2020 - Burgers and Andrade rheologies
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -48,7 +49,7 @@ integer  :: indx(3)
 !
  do j=(nla+1),1,-1
 !
-    call complex_rigidity(s,mu(j),eta(j),irheol(j),mu_s)
+    call complex_rigidity(s,mu(j),eta(j),irheol(j),par(j,:),mu_s)
 !
     call direct_matrix (n,r(j+1),rho(j),mu_s,gra(j+1),Ydir) 
     call inverse_matrix(n,r(j  ),rho(j),mu_s,gra(j  ),Yinv)

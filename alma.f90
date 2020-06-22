@@ -7,6 +7,7 @@
 !
 ! Based on a re-writing of ALMA 2.2
 ! Initial version February 24, 2020
+! Modified June 11, 2020 for Burgers rheology
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
 !
@@ -68,6 +69,8 @@ type(fm), allocatable :: gra(:)     ! Normalized gravity acceleration
 type(fm), allocatable :: rho(:)     ! Normalized density
 type(fm), allocatable :: mu(:)      ! Normalized rigidity
 type(fm), allocatable :: eta(:)     ! Normalized viscosity
+!
+type(fm), allocatable :: par(:,:)   ! Extra rheology parameters
 !
 type(fm), allocatable :: mlayer(:)  ! Normalized mass of each layers
 type(fm) :: mass                    ! Normalized planet mass

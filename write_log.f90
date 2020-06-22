@@ -18,7 +18,8 @@ implicit none
  integer :: i
  integer :: onefound, densiv
 !
- character(10) :: lab(0:3) = (/ 'Fluid     ', 'Elastic   ', 'Maxwell   ', 'Newton    ' /)
+ character(10) :: lab(0:6) = (/ 'Fluid     ', 'Elastic   ', 'Maxwell   ', 'Newton    ', &
+                                'Kelvin    ', 'Burgers   ', 'Andrade   ' /)
 !
 !
 !

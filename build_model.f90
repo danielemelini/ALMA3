@@ -4,6 +4,7 @@
 ! reads the rheology file and computes some derived quantities
 !
 ! Initial version DM February 24, 2020
+! Modified DM June 11, 2020 - Burgers (and Andrade) rheologies
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -16,7 +17,7 @@ implicit none
 !
  integer :: i,j,k,n
  integer, parameter :: nh=4            ! Number of header lines in rheology file
- character(20) :: buffer(5)
+ character(20) :: buffer(10)
  character(3)  :: code    
 !
  character(20), external :: to_uppercase
@@ -33,12 +34,7 @@ implicit none
     stop
  end if
 ! 
- rewind(10)
 !
- do i=1,nh
-    read(10,*)
- end do
-! 
 ! ----- Allocate dynamic arrays
  allocate(r  (0:nla+2))
  allocate(gra(0:nla+2))
@@ -46,37 +42,80 @@ implicit none
  allocate(mu (0:nla+1))
  allocate(eta(0:nla+1))
  allocate(irheol(0:nla+1))
+ allocate(par(0:nla+1,5))
 !
  allocate(mlayer(0:nla+1))
 !
 !
+! ----- Read the rheology codes for each layer
+ rewind(10)
+!
+ do i=1,nh
+    read(10,*)
+ end do
+!
+ do i=nla+1,0,-1
+!
+    read(10,*) (buffer(j), j=1,5)
+!
+    code=to_uppercase(buffer(5))
+!
+    if (code=='FLU') then
+        irheol(i)=0
+    elseif (code=='ELA') then
+        irheol(i)=1
+    elseif (code=='MAX') then
+        irheol(i)=2
+    elseif (code=='NEW') then
+        irheol(i)=3
+    elseif (code=='KEL') then
+        irheol(i)=4
+    elseif (code=='BUR') then
+        irheol(i)=5
+    elseif (code=='AND') then
+        irheol(i)=6
+    else
+        write(*,*) " - ERROR: Rheology '"//trim(buffer(5))//"' is unknown."
+        stop
+    end if
+!        
+ end do
+!
+!
 ! ----- Read the rheology file
 !
+ rewind(10)
+!
+ do i=1,nh
+     read(10,*)
+ end do
+!  
  r(0)=to_fm('0.0')
 !
  do i=nla+1,0,-1
- !
-     read(10,*) (buffer(j), j=1,5)
- !
+!
+     if (irheol(i)<5) then
+!
+        read(10,*) (buffer(j), j=1,5)
+!
+     elseif (irheol(i)==5) then
+!
+        read(10,*) (buffer(j), j=1,7)
+        par(i,1)=to_fm(buffer(6))
+        par(i,2)=to_fm(buffer(7))
+!
+     elseif (irheol(i)==6) then
+!
+        read(10,*) (buffer(j), j=1,6)
+        par(i,1)=to_fm(buffer(6))
+		par(i,2)=gamma(par(i,1)+1)
+!    
+    end if        
+!
      r(i+1) = to_fm(buffer(1))
      rho(i) = to_fm(buffer(2))
      mu (i) = to_fm(buffer(3))
      eta(i) = to_fm(buffer(4))
-!
-     code=to_uppercase(buffer(5))
-!
-     if (code=='FLU') then
-         irheol(i)=0
-     elseif (code=='ELA') then
-         irheol(i)=1
-     elseif (code=='MAX') then
-         irheol(i)=2
-     elseif (code=='NEW') then
-         irheol(i)=3
-     else
-         write(*,*) " - ERROR: Rheology '"//trim(buffer(5))//"' is unknown."
-         stop
-     end if
 !
  end do
 !
