@@ -16,7 +16,8 @@
  USE FMZM
  IMPLICIT NONE 
  INTEGER, PARAMETER :: NMAX=100 
- TYPE(FM) STINY, AMAX, DUM, XSUM, A(N,N), VV(NMAX)
+ TYPE(FM) STINY, AMAX, DUM, VV(NMAX)
+ TYPE(ZM) A(N,N), XSUM, CDUM
  INTEGER I, J, K, IMAX, CODE, D, N, NP, INDX(N)
 !
  D=1
@@ -60,9 +61,9 @@
 !   
    IF(J.NE.IMAX) THEN
      DO K=1,N
-       DUM = A(IMAX,K)
+       CDUM = A(IMAX,K)
        A(IMAX,K) = A(J,K)
-       A(J,K) = DUM
+       A(J,K) = CDUM
      END DO  
      D = -D
      VV(IMAX) = VV(J)
@@ -72,9 +73,9 @@
    IF(ABS(A(J,J)) < STINY) A(J,J) = STINY
 !
    IF(J.NE.N) THEN
-     DUM = TO_FM('1.0')/ A(J,J)
+     CDUM = TO_ZM('1.0')/ A(J,J)
      DO I=J+1,N
-       A(I,J) = A(I,J)*DUM
+       A(I,J) = A(I,J)*CDUM
      END DO  
    END IF 
  END DO  
@@ -105,7 +106,7 @@
  USE FMZM
  IMPLICIT NONE 
 !
- TYPE(FM) XSUM, A(N,N), B(N)
+ TYPE(ZM) XSUM, A(N,N), B(N)
  INTEGER N, NP, II, I, J, K, LL, INDX(N)
 !
  II = 0

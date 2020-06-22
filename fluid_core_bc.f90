@@ -4,6 +4,7 @@
 ! computes the boundary conditions at the CMB for a fluid inviscid core
 !
 ! Initial version DM February 24, 2020
+! Modified by DM June 16, 2020 - Converted to type(zm) for complex LNs
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -14,16 +15,15 @@ use fmzm
 use general_parameters
 implicit none
 !
-type(fm) :: b(6,3)
+type(zm) :: b(6,3)
 integer  :: n
 type(fm) :: r
 type(fm) :: rho
-type(fm) :: mu
 type(fm) :: gra
 !
 !
 !
- b = to_fm('0.0');
+ b = to_zm('0.0');
 !
 !
  b(1,1) = - to_fm('1') / gra * (r**n)

@@ -4,6 +4,7 @@
 ! computes the inverse of the fundamental matrix in a layer
 !
 ! Initial version DM February 24, 2020
+! Modified by DM June 16, 2020 - Converted to type(zm) for complex LNs
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -14,12 +15,12 @@ use fmzm
 use general_parameters
 implicit none
 !
-type(fm) :: Yinv(6,6)
-type(fm) :: D(6,6)
+type(zm) :: Yinv(6,6)
+type(zm) :: D(6,6)
 integer  :: n
 type(fm) :: r
 type(fm) :: rho
-type(fm) :: mu
+type(zm) :: mu
 type(fm) :: gra
 !
 type(fm) :: a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11
@@ -39,7 +40,7 @@ integer  :: i
  a10= to_fm(n)**2 - to_fm('1')                           ! n^2-1
  a11= to_fm('2') * to_fm(n) + to_fm('3')                 ! 2n+3
 !
- Yinv = to_fm('0.0');
+ Yinv = to_zm('0.0');
  D    = to_fm('0.0');
 ! 
  D(1,1) = a3 * r**(-(n+1))

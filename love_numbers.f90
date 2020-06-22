@@ -6,7 +6,8 @@
 !
 ! Initial version DM February 24, 2020
 ! Modified DM June 11, 2020 - Burgers and Andrade rheologies
-!
+! Modified DM June 16, 2020 - Complex LNs
+!                             (the 1/s factor is now outside this module)
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
 !
@@ -18,23 +19,23 @@ use rheological_profile
 implicit none
 !
 integer  :: n
-type(fm) :: s
-type(fm) :: hh, ll, kk
+type(zm) :: s
+type(zm) :: hh, ll, kk
 !
 integer :: i,j,k
 !
-type(fm) :: mu_s
-type(fm) :: Ydir(6,6), Yinv(6,6)
-type(fm) :: lambda(6,6)
-type(fm) :: bc(6,3)
+type(zm) :: mu_s
+type(zm) :: Ydir(6,6), Yinv(6,6)
+type(zm) :: lambda(6,6)
+type(zm) :: bc(6,3)
 type(fm) :: bs(3)
-type(fm) :: rr(3,3)
-type(fm) :: qq(3,3)
-type(fm) :: x(3)
-type(fm) :: prod(6,3)
+type(zm) :: rr(3,3)
+type(zm) :: qq(3,3)
+type(zm) :: x(3)
+type(zm) :: prod(6,3)
 !
-type(fm) :: aa(3,3)
-type(fm) :: bb(3)
+type(zm) :: aa(3,3)
+type(zm) :: bb(3)
 integer  :: d, code
 integer  :: indx(3)
 !
@@ -95,9 +96,9 @@ integer  :: indx(3)
  call lubksb(aa,3,3,indx,bb)
  x = matmul(qq,bb)
 !
- hh = x(1) * mass / ( r(nla+2) * s )
- ll = x(2) * mass / ( r(nla+2) * s )
- kk = ( -to_fm('1') - x(3) * mass / ( r(nla+2) * gra(nla+2) ) ) / s
+ hh = x(1) * mass / r(nla+2) 
+ ll = x(2) * mass / r(nla+2) 
+ kk = ( -to_fm('1') - x(3) * mass / ( r(nla+2) * gra(nla+2) ) ) 
 ! 
 ! 
 ! 

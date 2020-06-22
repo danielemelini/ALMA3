@@ -4,6 +4,7 @@
 ! reads the configuration file from unit 90
 !
 ! Initial version DM February 24, 2020
+! Modified by DM on June 16, 2020 - complex LNs
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -56,6 +57,17 @@ implicit none
  call read_data_line(90,buffer)  ;   file_rheol = adjustl(trim(buffer))
 !
  call read_data_line(90,buffer)  ;   file_log   = adjustl(trim(buffer))
+!
+ call read_data_line(90,buffer)  ;   read(buffer,*) cjunk
+ cjunk=to_uppercase(cjunk)
+ if( trim(adjustl(cjunk)) == 'REAL' ) then
+    itype=0
+ elseif( trim(adjustl(cjunk)) == 'COMPLEX' ) then
+    itype=1
+ else
+    write(*,*) " - ERROR: Unknown LN mode '"//trim(adjustl(cjunk))//"'"
+	stop
+ end if
 !
  call read_data_line(90,buffer)  ;   read(buffer,*) cjunk
  cjunk=to_uppercase(cjunk)

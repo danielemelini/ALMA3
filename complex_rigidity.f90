@@ -5,6 +5,7 @@
 !
 ! Initial version DM February 24, 2020
 ! Modified by DM June 11, 2020 - Burgers and Andrade rheologies
+! Modified by DM June 16, 2020 - Complex LNs  - converted to type(zm)
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -14,12 +15,12 @@ subroutine complex_rigidity(s,mu,eta,code,par,mu_s)
 use fmzm
 implicit none
 !
-type(fm) :: s
+type(zm) :: s
 type(fm) :: mu
 type(fm) :: eta
 integer  :: code
 type(fm) :: par(5)
-type(fm) :: mu_s
+type(zm) :: mu_s
 !
 type(fm) :: eta2
 type(fm) :: mu2
