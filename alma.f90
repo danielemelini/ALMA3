@@ -9,6 +9,11 @@
 ! Initial version February 24, 2020
 ! Modified June 11, 2020 for Burgers rheology
 ! Modified June 16, 2020 for complex LNs
+! Modified Aug 3, 2020 to specify the total number of layers
+!                      in the config file in place of the number of
+!                      mantle layers
+! Modified Sep 11, 2020 for 'external' time steps 
+!                      (changes are in config.f90 and time_steps.f90)
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
 !

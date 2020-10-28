@@ -4,6 +4,7 @@
 ! applies normalization to various physical quanities
 !
 ! Initial version DM February 24, 2020
+! Modified DM June 22, 2020 - changed normalization scale for mu to MAXVAL(mu)
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -22,7 +23,8 @@ implicit none
 !
  r0     = r(nla+2)
  rho0   = rho(1) 
- mu0    = mu(1)
+!mu0    = mu(1)
+ mu0    = maxval(mu)
  t0     = to_fm('1000') * to_fm('365.25') * to_fm('24') * to_fm('3600')
  eta0   = mu0*t0
  mass0  = rho0 * r0**3

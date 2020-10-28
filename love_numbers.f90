@@ -8,6 +8,7 @@
 ! Modified DM June 11, 2020 - Burgers and Andrade rheologies
 ! Modified DM June 16, 2020 - Complex LNs
 !                             (the 1/s factor is now outside this module)
+! Fixed DM October 27, 2020 - Wrong call to complex_rigidty for core BC
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
 !
@@ -65,7 +66,7 @@ integer  :: indx(3)
  if( irheol(0)==0 ) then
     call fluid_core_bc (n,r(1),rho(0),gra(1),bc)
  else
-    call complex_rigidity(s,mu(0),eta(0),irheol(0),mu_s)
+    call complex_rigidity(s,mu(0),eta(0),irheol(0),par(0,:),mu_s)
     call direct_matrix (n,r(1),rho(0),mu_s,gra(1),Ydir) 
     bc(:,1) = Ydir(:,1)
     bc(:,2) = Ydir(:,2)

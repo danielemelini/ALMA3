@@ -17,7 +17,7 @@
  1                          ! Step
 !
 !
- log                        ! Time scale ('log' / 'lin')
+ log                        ! Time scale ('log' / 'lin' / 'ext')
  0                        ! Time points (minus one)
  0 0                      ! Time range  (10^(m1:m2) kyrs)
 !
@@ -25,7 +25,7 @@
 ! # Rheological model 
 ! ~~~~~~~~~~~~~~~~~~~~~
 !
- 1                          ! Number of mantle layers
+ 3                          ! Number of layers
 !
  rheological_profiles/GS00-burgers.dat
 ! rheological_profiles/GS00-andrade.dat

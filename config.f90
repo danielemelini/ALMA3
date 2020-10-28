@@ -5,6 +5,9 @@
 !
 ! Initial version DM February 24, 2020
 ! Modified by DM on June 16, 2020 - complex LNs
+! Modified by DM on Aug 3, 2020 - config file now contains the
+!                                 total number of layers
+! Modified by DM on Sep 11, 2020 - external time steps
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -41,7 +44,9 @@ implicit none
 !
  call read_data_line(90,buffer)   ;   read(buffer,*) cjunk
  cjunk=to_uppercase(cjunk)
- if( trim(adjustl(cjunk)) == 'LOG' ) then
+ if( trim(adjustl(cjunk)) == 'EXT' ) then
+    itime=2
+ elseif( trim(adjustl(cjunk)) == 'LOG' ) then
     itime=1
  elseif( trim(adjustl(cjunk)) == 'LIN' ) then
     itime=0
@@ -53,7 +58,13 @@ implicit none
  call read_data_line(90,buffer)  ;   read(buffer,*) p
  call read_data_line(90,buffer)  ;   read(buffer,*) m1,m2
 !
- call read_data_line(90,buffer)  ;   read(buffer,*) nla
+ call read_data_line(90,buffer)  ;   read(buffer,*) nla 
+ nla=nla-2
+ if (nla.lt.0) then
+    write(*,*) " - ERROR: The model must contain at least two layers"
+	stop
+ end if
+!
  call read_data_line(90,buffer)  ;   file_rheol = adjustl(trim(buffer))
 !
  call read_data_line(90,buffer)  ;   file_log   = adjustl(trim(buffer))

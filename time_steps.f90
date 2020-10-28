@@ -6,6 +6,7 @@
 ! these time steps. 
 !
 ! Initial version DM February 24, 2020
+! Modified by DM on Sep 11, 2020 - external time steps
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -20,6 +21,9 @@
 !
  type(fm) :: t1, t2, dt
  type(fm) :: a, a1, a2, da
+!
+ character(100), parameter :: file_name='time_steps.dat'
+ character(100) :: junk
 !
 !
 ! 
@@ -54,6 +58,16 @@
            end do 
         end if
 !
+ elseif (itime==2) then    ! external
+!
+        open(20,file=trim(file_name),status='old')
+!
+        do i=1,(p+1)
+           read(20,*) junk
+           t(i) = to_fm(junk)
+        end do
+!   
+        close(20)
 !
  end if
 !
