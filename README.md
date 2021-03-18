@@ -1,7 +1,7 @@
 # ALMA3
 _the plAnetary Love nuMbers cAlculator_
 
-ALMA3 computes loading and tidal Love numbers for a spherically symmetric, radially stratified planet. Both real (time-domain) and complex (frequency-domain) Love numbers can be computed. The planetary structure can include an arbitrary number of layers, and each layer can have a different rheological law. Currently, ALMA3 can model the following linear rheologies: Elastic, Maxwell visco-elastic, Newtonian viscous fluid, Kelvin-Voigt solid, Burgers transient rheology and Andrade transient rheology.
+ALMA3 computes loading and tidal Love numbers for a spherically symmetric, radially stratified planet. Both real (time-domain) and complex (frequency-domain) Love numbers can be computed. The planetary structure can include an arbitrary number of layers, and each layer can have a different rheological law. Currently, ALMA3 can model the following linear rheologies: Elastic, Maxwell visco-elastic, Newtonian viscous fluid, Kelvin-Voigt solid, Burgers and Andrade transient rheologies.
 
 ## Building ALMA3
 
