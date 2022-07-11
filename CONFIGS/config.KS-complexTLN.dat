@@ -7,48 +7,54 @@
 ! # General parameters
 ! ~~~~~~~~~~~~~~~~~~~~~
 !
- 256                        ! number of digits
+ 128                        ! number of digits
  8                          ! order of the Gaver sequence
 !
- Loading                    ! LN type ('Loading' or 'Tidal')
+ Tidal                      ! LN type ('Loading' or 'Tidal')
 !
  2                          ! Minimum degree
- 1024                        ! Maximum degree
+ 2                          ! Maximum degree
  1                          ! Step
 !
 !
- log                        ! Time scale ('log' / 'lin' / 'ext')
- 0                        ! Time points (minus one)
- 0 0                      ! Time range  (10^(m1:m2) kyrs)
+ log                       ! Time scale ('log' / 'lin' / 'ext')
+ 100                       ! Time points (minus one)
+ -5 5                      ! Time range  (10^(m1:m2) kyrs)
+!
+! ~~~~~~~~~~~~~~~~~~~~~
+! # Load time history
+! ~~~~~~~~~~~~~~~~~~~~~
+!
+ step                     ! Load fcn ( 'step' / 'ramp' )
+ 1.0                      ! Ramp length (kyrs)
 !
 ! ~~~~~~~~~~~~~~~~~~~~~
 ! # Rheological model 
 ! ~~~~~~~~~~~~~~~~~~~~~
 !
- 3                          ! Number of layers
+ 2                          ! Number of layers
 !
- rheological_profiles/GS00-burgers.dat
-! rheological_profiles/GS00-andrade.dat
+ MODELS/uniform-sphere.dat
 !
 !
 ! ~~~~~~~~~~~~~~~~~~~~~
 ! # Log file 
 ! ~~~~~~~~~~~~~~~~~~~~~
 !
-alma-test.log
+ alma-KS.log
 !
 !
 ! ~~~~~~~~~~~~~~~~~~~~~
 ! # Output files 
 ! ~~~~~~~~~~~~~~~~~~~~~
 !
-Real                   ! 'Real' or 'Complex' LNs
+ Complex                     ! 'Real' or 'Complex' LNs
 !
-ln_vs_n                     ! Output file format (LNs vs t or LNs vs n)
+ ln_vs_t                     ! Output file format (LNs vs t or LNs vs n)
 !
-h.dat
-l.dat
-k.dat
+ h_complex_KS.dat
+ l_complex_KS.dat
+ k_complex_KS.dat
 !
 !
 !

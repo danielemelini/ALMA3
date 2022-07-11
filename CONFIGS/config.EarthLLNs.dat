@@ -1,0 +1,59 @@
+! ==========================================================================
+! ALMA configuration file
+! ==========================================================================
+!
+! ~~~~~~~~~~~~~~~~~~~~~
+! # General parameters
+! ~~~~~~~~~~~~~~~~~~~~~
+!
+ 128                        ! number of digits
+ 8                          ! order of the Gaver sequence
+!
+ Loading                    ! LN type ('Loading' or 'Tidal')
+!
+ 2                          ! Minimum degree
+ 500                        ! Maximum degree
+ 2                          ! Step
+!
+ log                       ! Time scale ('log' / 'lin' / 'ext')
+ 3                         ! Time points (minus one)
+ -2 1                      ! Time range  (10^(m1:m2) kyrs)
+!
+! ~~~~~~~~~~~~~~~~~~~~~
+! # Load time history
+! ~~~~~~~~~~~~~~~~~~~~~
+!
+ step                     ! Load fcn ( 'step' / 'ramp' )
+ 1.0                      ! Ramp length (kyrs)
+!
+! ~~~~~~~~~~~~~~~~~~~~~
+! # Rheological model 
+! ~~~~~~~~~~~~~~~~~~~~~
+!
+ 6                          ! Number of layers
+!
+ MODELS/VM5a.dat
+!
+!
+! ~~~~~~~~~~~~~~~~~~~~~
+! # Log file 
+! ~~~~~~~~~~~~~~~~~~~~~
+!
+ alma.log
+!
+!
+! ~~~~~~~~~~~~~~~~~~~~~
+! # Output files 
+! ~~~~~~~~~~~~~~~~~~~~~
+!
+ Real                   ! 'Real' or 'Complex' LNs
+!
+ ln_vs_n                     ! Output file format (LNs vs t or LNs vs n)
+!
+ h_EarthLLN.dat
+ l_EarthLLN.dat
+ k_EarthLLN.dat
+!
+! ==========================================================================
+! End of ALMA configuration file
+! ==========================================================================

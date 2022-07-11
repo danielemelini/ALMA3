@@ -1,0 +1,63 @@
+!
+! ==========================================================================
+! ALMA configuration file
+! ==========================================================================
+!
+! ~~~~~~~~~~~~~~~~~~~~~
+! # General parameters
+! ~~~~~~~~~~~~~~~~~~~~~
+!
+ 128                        ! number of digits
+ 8                          ! order of the Gaver sequence
+!
+ Tidal                      ! LN type ('Loading' or 'Tidal')
+!
+ 2                          ! Minimum degree
+ 2                          ! Maximum degree
+ 1                          ! Step
+!
+!
+ ext                       ! Time scale ('log' / 'lin' / 'ext')
+ 0                       ! Time points (minus one)
+ -3 2                      ! Time range  (10^(m1:m2) kyrs)
+!
+! ~~~~~~~~~~~~~~~~~~~~~
+! # Load time history
+! ~~~~~~~~~~~~~~~~~~~~~
+!
+ step                     ! Load fcn ( 'step' / 'ramp' )
+ 1.0                      ! Ramp length (kyrs)
+!
+! ~~~~~~~~~~~~~~~~~~~~~
+! # Rheological model 
+! ~~~~~~~~~~~~~~~~~~~~~
+!
+ 71                          ! Number of layers
+!
+ MODELS/Moon_Garcia2012.dat
+!
+!
+! ~~~~~~~~~~~~~~~~~~~~~
+! # Log file 
+! ~~~~~~~~~~~~~~~~~~~~~
+!
+ alma.log
+!
+!
+! ~~~~~~~~~~~~~~~~~~~~~
+! # Output files 
+! ~~~~~~~~~~~~~~~~~~~~~
+!
+ Complex                     ! 'Real' or 'Complex' LNs
+!
+ ln_vs_t                     ! Output file format (LNs vs t or LNs vs n)
+!
+ h.dat
+ l.dat
+ k.dat
+!
+!
+!
+! ==========================================================================
+! End of ALMA configuration file
+! ==========================================================================
