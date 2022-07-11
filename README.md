@@ -7,7 +7,7 @@ ALMA3 computes loading and tidal Love numbers for a spherically symmetric, radia
 
 ALMA3 is the result of research work by Daniele Melini, Christelle Saliby and Giorgio Spada. It is distributed free of charge under the BSD 3-clause license, with the hope that it may be useful for research and educational purposes. A copy of the BSD 3-clause license is included in this repository. Please acknowledge the use of ALMA3 by citing the following publication:
 
-Melini, D., Saliby, C. & Spada, G., On computing viscoelastic Love numbers for general planetary models: the ALMA3 code, Geophysical Journal International, 2022, ggac263, https://doi.org/10.1093/gji/ggac26)
+Melini, D., Saliby, C. & Spada, G., On computing viscoelastic Love numbers for general planetary models: the ALMA3 code, Geophysical Journal International, 2022, ggac263, https://doi.org/10.1093/gji/ggac263
 
 
 ## Building ALMA3
