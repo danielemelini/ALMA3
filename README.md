@@ -20,7 +20,15 @@ To run ALMA3, type
 
 `alma.exe <config_file>`
 
-where `<config_file>` is the name of the configuration file containing all the options for the ALMA3 run. Some example configuration files are stored into the `CONFIGS/` folder. Among other parameters, the configuration file contains the name of the data file describing the planetary rheological structure. Some example files are stored into the `rheological_models/` folder.
+where `<config_file>` is the name of the configuration file containing all the options for the ALMA3 run. Some example configuration files are stored into the `CONFIGS/` folder. Among other parameters, the configuration file contains the name of the data file describing the planetary rheological structure. Some example files are stored into the `MODELS/` folder.
+
+## Contacts
+
+Please refer for any questions about ALMA3 to:
+
+Daniele Melini, Istituto Nazionale di Geofisica e Vulcanologia, Roma, Italy, daniele.melini@ingv.it
+
+Giorgio Spada, University of Bologna, Italy, giorgio.spada@gmail.com
 
 
 
