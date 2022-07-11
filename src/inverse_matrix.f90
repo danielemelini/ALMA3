@@ -5,6 +5,8 @@
 !
 ! Initial version DM February 24, 2020
 ! Modified by DM June 16, 2020 - Converted to type(zm) for complex LNs
+! Fixed DM June 18, 2021       - Added 'save' to local variables
+!                                to avoid memory leaks (see FMLIB manual)
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -16,14 +18,14 @@ use general_parameters
 implicit none
 !
 type(zm) :: Yinv(6,6)
-type(zm) :: D(6,6)
 integer  :: n
 type(fm) :: r
 type(fm) :: rho
 type(zm) :: mu
 type(fm) :: gra
 !
-type(fm) :: a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11
+type(zm), save :: D(6,6)
+type(fm), save :: a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11
 !
 integer  :: i
 !

@@ -27,7 +27,7 @@ FMLIB_OBJS=fmsave.o fm.o fmzm90.o
 all: ../alma.exe
 #
 clean:
-	$(RM) ../alma.exe *.mod *.o
+	$(RM) ../alma.exe *.exe *.mod *.o
 #
 ../alma.exe: $(FMLIB_OBJS) $(ALMA_OBJS) 
 	$(FC) $(FOPTS) $(FMLIB_OBJS) $(ALMA_OBJS) -o ../alma.exe

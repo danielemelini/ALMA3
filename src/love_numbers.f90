@@ -9,6 +9,8 @@
 ! Modified DM June 16, 2020 - Complex LNs
 !                             (the 1/s factor is now outside this module)
 ! Fixed DM October 27, 2020 - Wrong call to complex_rigidty for core BC
+! Fixed DM June 18, 2021    - Added 'save' to local variables
+!                             to avoid memory leaks (see FMLIB manual)
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
 !
@@ -25,18 +27,19 @@ type(zm) :: hh, ll, kk
 !
 integer :: i,j,k
 !
-type(zm) :: mu_s
-type(zm) :: Ydir(6,6), Yinv(6,6)
-type(zm) :: lambda(6,6)
-type(zm) :: bc(6,3)
-type(fm) :: bs(3)
-type(zm) :: rr(3,3)
-type(zm) :: qq(3,3)
-type(zm) :: x(3)
-type(zm) :: prod(6,3)
+type(zm), save :: mu_s
+type(zm), save :: Ydir(6,6), Yinv(6,6)
+type(zm), save :: lambda(6,6)
+type(zm), save :: bc(6,3)
+type(fm), save :: bs(3)
+type(zm), save :: rr(3,3)
+type(zm), save :: qq(3,3)
+type(zm), save :: x(3)
+type(zm), save :: prod(6,3)
 !
-type(zm) :: aa(3,3)
-type(zm) :: bb(3)
+type(zm), save :: aa(3,3)
+type(zm), save :: bb(3)
+!
 integer  :: d, code
 integer  :: indx(3)
 !

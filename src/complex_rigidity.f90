@@ -6,6 +6,8 @@
 ! Initial version DM February 24, 2020
 ! Modified by DM June 11, 2020 - Burgers and Andrade rheologies
 ! Modified by DM June 16, 2020 - Complex LNs  - converted to type(zm)
+! Fixed DM June 18, 2021       - Added 'save' to local variables
+!                                to avoid memory leaks (see FMLIB manual)
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -22,10 +24,10 @@ integer  :: code
 type(fm) :: par(5)
 type(zm) :: mu_s
 !
-type(fm) :: eta2
-type(fm) :: mu2
-type(fm) :: alpha
-type(fm) :: gam
+type(fm), save :: eta2
+type(fm), save :: mu2
+type(fm), save :: alpha
+type(fm), save :: gam
 !
 !
 !

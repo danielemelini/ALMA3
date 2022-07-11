@@ -4,6 +4,8 @@
 ! computes the boundary conditions at the surface
 !
 ! Initial version DM February 24, 2020
+! Fixed DM June 18, 2021       - Added 'save' to local variables
+!                                to avoid memory leaks (see FMLIB manual)
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -18,7 +20,8 @@ type(fm) :: bs(3)
 integer  :: n
 type(fm) :: r
 type(fm) :: gra
-type(fm) :: kappa
+!
+type(fm), save :: kappa
 !
 !
 !

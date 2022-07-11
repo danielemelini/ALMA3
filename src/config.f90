@@ -8,6 +8,8 @@
 ! Modified by DM on Aug 3, 2020 - config file now contains the
 !                                 total number of layers
 ! Modified by DM on Sep 11, 2020 - external time steps
+! Modified by DM on June 21, 2021 - linear time-history
+! Modified by DM on Aug 11, 2021 - LN rate of change
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -58,6 +60,19 @@ implicit none
  call read_data_line(90,buffer)  ;   read(buffer,*) p
  call read_data_line(90,buffer)  ;   read(buffer,*) m1,m2
 !
+ call read_data_line(90,buffer)  ;   read(buffer,*) cjunk
+ cjunk=to_uppercase(cjunk)
+ if( trim(adjustl(cjunk)) == 'STEP' ) then
+    ihist = 1
+ elseif( trim(adjustl(cjunk)) == 'RAMP' ) then
+    ihist = 2
+ else 
+    write(*,*) " - ERROR: Unknown load history '"//trim(adjustl(cjunk))//"'"
+    stop
+ end if
+!
+ call read_data_line(90,buffer)  ;   read(buffer,*) tau
+!
  call read_data_line(90,buffer)  ;   read(buffer,*) nla 
  nla=nla-2
  if (nla.lt.0) then
@@ -75,10 +90,18 @@ implicit none
     itype=0
  elseif( trim(adjustl(cjunk)) == 'COMPLEX' ) then
     itype=1
+ elseif( trim(adjustl(cjunk)) == 'RATE' ) then
+    itype=2
  else
     write(*,*) " - ERROR: Unknown LN mode '"//trim(adjustl(cjunk))//"'"
-	stop
+    stop
  end if
+!
+ if( itype==2 ) then
+    flag_rate=.true.
+ else
+    flag_rate=.false.
+ end if   
 !
  call read_data_line(90,buffer)  ;   read(buffer,*) cjunk
  cjunk=to_uppercase(cjunk)

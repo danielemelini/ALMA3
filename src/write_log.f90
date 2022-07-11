@@ -4,6 +4,7 @@
 ! Writes various information to the log file opened on unit 99
 !
 ! Initial version DM February 24, 2020
+! Modified by DM Aug 11, 2021 - added some messages in the MODE=0 section
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -45,6 +46,15 @@ implicit none
  if (iload==0) write(99,*) ' Requested Love numbers are of the TIDAL type'
  if (iload==1) write(99,*) ' Requested Love numbers are of the LOADING type'
 !
+ if (itype==0) write(99,*) ' REAL (time-domain) LNs will be computed'
+ if (itype==1) write(99,*) ' COMPLEX (frequency-domain) LNs will be computed'
+ if (itype==2) write(99,*) ' REAL (time-domain) DERIVATIVES of LNs will be computed'
+!
+ if (itype==0) then
+    if (ihist==1) write(99,*) ' A Heaviside load time-history is assumed'
+    if (ihist==2) write(99,*) ' A linear ramp load time-history is assumed'
+    if (ihist==2) write(99,*) ' (loading phase length is ',tau,' kyrs)'
+ end if
 !
  end if
 !

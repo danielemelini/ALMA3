@@ -14,6 +14,10 @@
 !                      mantle layers
 ! Modified Sep 11, 2020 for 'external' time steps 
 !                      (changes are in config.f90 and time_steps.f90)
+! Modified Jun 21, 2021 for the 'linear' loading history
+!                      (changes are also in config.f90)
+! Modified Aug 11, 2021 for the 'rate' option and updated the 'write_log' sbr
+!                      (changes also in config.f90)
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
 !
@@ -37,7 +41,10 @@ type(fm) :: Gnt                     ! Un-normalized Newton constant
 !
 integer  :: iload                   ! Load type ('0'->tidal, '1'->loading)
 integer  :: itime                   ! Time scale type ('0'->linear, '1'->log)
+integer  :: ihist                   ! Load time history ( '1'->step, '2'->ramp )
 integer  :: lmin, lmax, lstep       ! Min/max harmonic degree and step
+!
+real(4)  :: tau                     ! Length of the ramp phase for ihist=2
 !
 type(fm), allocatable :: t(:)       ! Time steps (or period)
 !
@@ -53,7 +60,8 @@ character(100) :: file_k            ! File for 'k' LN
 character(100) :: file_log          ! Log file
 !
 integer :: ifmt                     ! Output file format ('1'->LN vs n, '2'->LN vs t)
-integer :: itype                    ! Mode switch ('0'-> Real LNs, '1'->Complex LNs)
+integer :: itype                    ! Mode switch ('0'-> Real LNs, '1'->Complex LNs, '2'->Derivatives of real LNs)
+logical :: flag_rate                ! If true, LN rates will be computed
 !
 end module
 !
@@ -119,6 +127,7 @@ implicit none
  type(fm) :: f
  type(fm) :: omega
  type(zm) :: iota
+ type(zm) :: fh
 !
  real(4) :: time_0, time_1, time_2 
  logical :: file_exists
@@ -226,7 +235,7 @@ implicit none
  idx = 0
 !
 !============================================== Real LNs
- if (itype==0 ) then        
+ if ( (itype==0 ) .or. (itype==2 ) ) then        
 !
     do n=lmin,lmax,lstep
 !
@@ -242,9 +251,21 @@ implicit none
 !
             call love_numbers(n,s,hh,ll,kk)
 !
-            h_love(idx,it) = h_love(idx,it) + (hh / s) * zeta(ik) * f 
-            l_love(idx,it) = l_love(idx,it) + (ll / s) * zeta(ik) * f 
-            k_love(idx,it) = k_love(idx,it) + (kk / s) * zeta(ik) * f 
+            if( ihist.eq.1 ) then
+               fh = to_fm('1')/s
+            elseif( ihist.eq.2 ) then
+               fh = (to_fm('1') - exp(-s*to_fm(tau))) / (to_fm(tau) * s**2)
+            end if
+!
+            if( flag_rate ) then
+               h_love(idx,it) = h_love(idx,it) + fh * (s * hh) * zeta(ik) * f 
+               l_love(idx,it) = l_love(idx,it) + fh * (s * ll) * zeta(ik) * f 
+               k_love(idx,it) = k_love(idx,it) + fh * (s * kk) * zeta(ik) * f 
+            else
+               h_love(idx,it) = h_love(idx,it) + fh * hh * zeta(ik) * f 
+               l_love(idx,it) = l_love(idx,it) + fh * ll * zeta(ik) * f 
+               k_love(idx,it) = k_love(idx,it) + fh * kk * zeta(ik) * f 
+            end if
 ! 
           end do
 ! 
@@ -304,8 +325,13 @@ implicit none
 !
  do iu=71,73 
     write(iu,'(a)') '# ----------------------------------------------------------' 
-    if(iload==0) write(iu,'(a)') '# '//ch(iu-70)//' tidal Love number '
-    if(iload==1) write(iu,'(a)') '# '//ch(iu-70)//' load Love number '
+    if( flag_rate ) then
+       if(iload==0) write(iu,'(a)') '# '//ch(iu-70)//'-dot tidal Love number '
+       if(iload==1) write(iu,'(a)') '# '//ch(iu-70)//'-dot load Love number '
+    else
+       if(iload==0) write(iu,'(a)') '# '//ch(iu-70)//' tidal Love number '
+       if(iload==1) write(iu,'(a)') '# '//ch(iu-70)//' load Love number '
+    end if
     write(iu,'(a)') '# Created by ALMA on '//trim(timestamp)
     write(iu,'(a)') '# ----------------------------------------------------------' 
     write(iu,'(a)') '# '  
@@ -320,7 +346,7 @@ implicit none
 !
       idx = idx + 1
 !
-      if (itype==0) then
+      if ((itype==0).or.(itype==2)) then
          write(71,'(i4,1x,3048(e19.8))') n,(to_dp(h_love(idx,it)),it=1,p+1) 
          write(72,'(i4,1x,3048(e19.8))') n,(to_dp(l_love(idx,it)),it=1,p+1) 
          write(73,'(i4,1x,3048(e19.8))') n,(to_dp(k_love(idx,it)),it=1,p+1) 
@@ -336,7 +362,7 @@ implicit none
 !
    do it=1,p+1
 !  
-      if (itype==0) then
+      if ((itype==0).or.(itype==2)) then
          write(71,'(3048(e19.8))') to_dp(t(it)),(to_dp(h_love(idx,it)),idx=1,ndeg) 
          write(72,'(3048(e19.8))') to_dp(t(it)),(to_dp(l_love(idx,it)),idx=1,ndeg) 
          write(73,'(3048(e19.8))') to_dp(t(it)),(to_dp(k_love(idx,it)),idx=1,ndeg) 

@@ -20,6 +20,8 @@
  TYPE(ZM) A(N,N), XSUM, CDUM
  INTEGER I, J, K, IMAX, CODE, D, N, NP, INDX(N)
 !
+ SAVE STINY, AMAX, DUM, VV, XSUM, CDUM
+!
  D=1
  CODE=0
 !
@@ -108,6 +110,8 @@
 !
  TYPE(ZM) XSUM, A(N,N), B(N)
  INTEGER N, NP, II, I, J, K, LL, INDX(N)
+! 
+ SAVE XSUM
 !
  II = 0
 !
