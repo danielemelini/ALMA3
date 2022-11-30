@@ -18,6 +18,7 @@
 !                      (changes are also in config.f90)
 ! Modified Aug 11, 2021 for the 'rate' option and updated the 'write_log' sbr
 !                      (changes also in config.f90)
+! Modified Nov 29, 2022 for the degree 1 LN (love_numbers.f90 and surface_bc.f90)
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
 !

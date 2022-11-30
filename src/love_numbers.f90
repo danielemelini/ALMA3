@@ -11,6 +11,7 @@
 ! Fixed DM October 27, 2020 - Wrong call to complex_rigidty for core BC
 ! Fixed DM June 18, 2021    - Added 'save' to local variables
 !                             to avoid memory leaks (see FMLIB manual)
+! DM November 29, 2022      - Degree 1 LNs
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
 !
@@ -83,9 +84,15 @@ integer  :: indx(3)
 !
  prod = matmul(lambda,bc)
 !
- rr(1,:) = prod(3,:)
- rr(2,:) = prod(4,:)
- rr(3,:) = prod(6,:) 
+ if (n==1) then 
+    rr(1,:) = prod(3,:)
+    rr(2,:) = prod(4,:)
+    rr(3,:) = prod(5,:) 
+ else
+    rr(1,:) = prod(3,:)
+    rr(2,:) = prod(4,:)
+    rr(3,:) = prod(6,:) 
+ end if
 !
  qq(1,:) = prod(1,:)
  qq(2,:) = prod(2,:)
