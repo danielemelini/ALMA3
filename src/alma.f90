@@ -19,6 +19,7 @@
 ! Modified Aug 11, 2021 for the 'rate' option and updated the 'write_log' sbr
 !                      (changes also in config.f90)
 ! Modified Nov 29, 2022 for the degree 1 LN (love_numbers.f90 and surface_bc.f90)
+! Modified Oct  5, 2023 changed the numbering scheme for the layers
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
 !
@@ -78,7 +79,7 @@ module rheological_profile
 use fmzm
 implicit none
 !
-integer :: nla                      ! Number of mantle layers
+integer :: nla                      ! Number of layers
 !
 type(fm), allocatable :: r(:)       ! Normalized radii of interfaces
 type(fm), allocatable :: gra(:)     ! Normalized gravity acceleration

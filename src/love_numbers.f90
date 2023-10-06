@@ -12,6 +12,7 @@
 ! Fixed DM June 18, 2021    - Added 'save' to local variables
 !                             to avoid memory leaks (see FMLIB manual)
 ! DM November 29, 2022      - Degree 1 LNs
+! Modified Oct  5, 2023     - changed the numbering scheme for the layers
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
 !
@@ -53,12 +54,12 @@ integer  :: indx(3)
 !
 ! ---- Build the propagator product
 !
- do j=(nla+1),1,-1
+ do j=nla,2,-1
 !
     call complex_rigidity(s,mu(j),eta(j),irheol(j),par(j,:),mu_s)
 !
-    call direct_matrix (n,r(j+1),rho(j),mu_s,gra(j+1),Ydir) 
-    call inverse_matrix(n,r(j  ),rho(j),mu_s,gra(j  ),Yinv)
+    call direct_matrix (n,r(j  ),rho(j),mu_s,gra(j  ),Ydir) 
+    call inverse_matrix(n,r(j-1),rho(j),mu_s,gra(j-1),Yinv)
  !
     lambda=matmul(lambda,matmul(Ydir,Yinv))
 !
@@ -67,17 +68,17 @@ integer  :: indx(3)
 !
 ! ---- Compute the boundary conditions
 !
- if( irheol(0)==0 ) then
-    call fluid_core_bc (n,r(1),rho(0),gra(1),bc)
+ if( irheol(1)==0 ) then
+    call fluid_core_bc (n,r(1),rho(1),gra(1),bc)
  else
-    call complex_rigidity(s,mu(0),eta(0),irheol(0),par(0,:),mu_s)
-    call direct_matrix (n,r(1),rho(0),mu_s,gra(1),Ydir) 
+    call complex_rigidity(s,mu(1),eta(1),irheol(1),par(1,:),mu_s)
+    call direct_matrix (n,r(1),rho(1),mu_s,gra(1),Ydir) 
     bc(:,1) = Ydir(:,1)
     bc(:,2) = Ydir(:,2)
     bc(:,3) = Ydir(:,3)    
  end if
 ! 
- call surface_bc    (n,r(nla+2),gra(nla+2),bs)
+ call surface_bc    (n,r(nla),gra(nla),bs)
 !
 !
 ! ---- Compute the 'R' and 'Q' arrays
@@ -107,9 +108,9 @@ integer  :: indx(3)
  call lubksb(aa,3,3,indx,bb)
  x = matmul(qq,bb)
 !
- hh = x(1) * mass / r(nla+2) 
- ll = x(2) * mass / r(nla+2) 
- kk = ( -to_fm('1') - x(3) * mass / ( r(nla+2) * gra(nla+2) ) ) 
+ hh = x(1) * mass / r(nla) 
+ ll = x(2) * mass / r(nla) 
+ kk = ( -to_fm('1') - x(3) * mass / ( r(nla) * gra(nla) ) ) 
 ! 
 ! 
 ! 

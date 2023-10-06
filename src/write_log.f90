@@ -5,6 +5,8 @@
 !
 ! Initial version DM February 24, 2020
 ! Modified by DM Aug 11, 2021 - added some messages in the MODE=0 section
+! Modified Oct  5, 2023       - changed the numbering scheme for the layers
+!                               fixed some bugs and wrong labels
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -68,84 +70,93 @@ implicit none
  write(99,*) ' '
  write(99,*) ' Radii of the interfaces from bottom to top, (km)'
 !
- i=0
- write(99,*) ' ', i, ':', to_sp(r(i))/1000, '(Planet center)'
+ do i=0,nla
+    if(i==0) then
+       write(99,*) ' ', i, ':', to_sp(r(i))/1000, '(Planet center)'
+    elseif(i==nla) then
+       write(99,*) ' ', i, ':', to_sp(r(i))/1000, '(External surface)' 
+    elseif(i==1) then
+       write(99,*) ' ', i, ':', to_sp(r(i))/1000, '(CMB)'
+    else
+       write(99,*) ' ', i, ':', to_sp(r(i))/1000
+    end if
+ end do
 !
- i=1
- write(99,*) ' ', i, ':', to_sp(r(i))/1000, '(CMB)'	
-! 
- do i=2, nla+1
-     write(99,*) ' ', i, ':', to_sp(r(i))/1000
- enddo
-!
- i=nla+2
- write(99,*) ' ', i, ':', to_sp(r(i))/1000, '(External surface)' 
 !
 !
  write(99,*) ' '
  write(99,*) ' Rigidity of the layers from bottom to top, (*10^11 Pa)' 
 !
- i=0
- write(99,*) ' ', i, ':', to_sp(mu(i))/1.e11, '(Core)'
-!
- do i=1, nla
-     write(99,*) ' ', i, ':', to_sp(mu(i))/1.e11   
- enddo
+ do i=1,nla
+    if(i==1) then
+       write(99,*) ' ', i, ':', to_sp(mu(i))/1.e11, '(Core)'
+    elseif(i==nla) then
+       write(99,*) ' ', i, ':', to_sp(mu(i))/1.e11, '(Lithosphere)'
+    else
+       write(99,*) ' ', i, ':', to_sp(mu(i))/1.e11   
+    end if
+ end do
 ! 
- i=nla+1
- write(99,*) ' ', i, ':', to_sp(mu(i))/1.e11, '(Lithosphere)'	
 !
 !
  write(99,*) ' '
  write(99,*) ' Density of the layers from bottom to top, (kg/m^3)' 
 !
- i=0
- write(99,*) ' ', i, ':', to_sp(rho(i)), '(Core)'
+ do i=1,nla
+    if(i==1) then
+       write(99,*) ' ', i, ':', to_sp(rho(i)), '(Core)'
+    elseif(i==nla) then
+       write(99,*) ' ', i, ':', to_sp(rho(i)), '(Lithosphere)'
+    else
+       write(99,*) ' ', i, ':', to_sp(rho(i))    
+    end if
+ end do
 !
- do i=1, nla
-     write(99,*) ' ', i, ':', to_sp(rho(i))    
- enddo	
-!
- i=nla+1
- write(99,*) ' ', i, ':', to_sp(rho(i)), '(Lithosphere)'
 !
 !
  write(99,*) ' '
  densiv=0
  onefound=0
- do i=0,nla
+ do i=1,nla-1
       if(rho(i).lt.rho(i+1)) then 
       onefound=1 
       densiv=1
       write(99,*) ' Density inversion for layers ', i, i+1
       densiv=0
-      endif		
- enddo	 
+      endif
+ end do
 !
  if(onefound==0) write(99,*) ' NO density inversions found!'
 !
 !
  write(99,*) ' '
  write(99,*) ' Viscosity of the layers from bottom to top, (Pa.s)'	
- i=0
- write(99,*) ' ', i, ':', to_dp(eta(i)), '(Core)'
- do i=1, NLA
-     write(99,*) ' ', i, ':', to_dp(eta(i))    
- enddo	
- i=NLA+1
- write(99,*) ' ', i, ':', to_dp(eta(i)), ' (Lithosphere)'
+!
+ do i=1,nla
+    if(i==1) then
+       write(99,*) ' ', i, ':', to_dp(eta(i)), '(Core)'
+    elseif(i==nla) then
+       write(99,*) ' ', i, ':', to_dp(eta(i)), ' (Lithosphere)'
+    else
+       write(99,*) ' ', i, ':', to_dp(eta(i))    
+    end if
+ end do
+!
 !
 !
  write(99,*) ' '
- write(99,*) ' Rheology of the layers from bottom to top'	
- i=0
- write(99,*) ' ', i, ':', lab(irheol(i)), ' (Core)'
- do i=1, NLA
-     write(99,*) ' ', i, ':', lab(irheol(i))    
- enddo	
- i=NLA+1
- write(99,*) ' ', i, ':', lab(irheol(i)), ' (Lithosphere)'
-
+ write(99,*) ' Rheology of the layers from bottom to top'
+!
+ do i=1,nla
+    if(i==1) then
+       write(99,*) ' ', i, ':', lab(irheol(i)), ' (Core)'
+    elseif(i==nla) then
+       write(99,*) ' ', i, ':', lab(irheol(i)), ' (Lithosphere)'
+    else
+       write(99,*) ' ', i, ':', lab(irheol(i))    
+    end if
+ end do
+!
 !
 !
  write(99,*) ' '
@@ -153,15 +164,20 @@ implicit none
 !
  write(99,*) ' '
  write(99,*) ' Gravity at the interfaces from bottom to top, (m/s^2)'
- i=0
- write(99,*) ' ', i, ':', to_sp(r(i))/1000, to_sp(gra(i)), '(Earth center)'
- i=1
- write(99,*) ' ', i, ':', to_sp(r(i))/1000, to_sp(gra(i)), '(CMB)'	
- do i=2, NLA+1
-     write(99,*) ' ', i, ':', to_sp(r(i))/1000, to_sp(gra(i))
- enddo
- i=NLA+2
- write(99,*) ' ', i, ':', to_sp(r(i))/1000, to_sp(gra(i)), '(External surface)'	 
+!
+ do i=0,nla
+    if(i==0) then
+       write(99,*) ' ', i, ':', to_sp(r(i))/1000, to_sp(gra(i)), '(Planet center)'
+    elseif(i==nla) then
+       write(99,*) ' ', i, ':', to_sp(r(i))/1000, to_sp(gra(i)), '(External surface)'	 
+    elseif(i==1) then
+       write(99,*) ' ', i, ':', to_sp(r(i))/1000, to_sp(gra(i)), '(CMB)'
+    else
+       write(99,*) ' ', i, ':', to_sp(r(i))/1000, to_sp(gra(i))
+    end if
+ end do
+!
+!
 !
 !
  end if
@@ -185,48 +201,66 @@ implicit none
 !
  write(99,*) ' '
  write(99,*) ' NORMALIZED Radii of the interfaces from bottom to top'
- i=0
- write(99,*) ' ', i, ':', to_sp(r(i)), '(Planet center)'
- i=1
- write(99,*) ' ', i, ':', to_sp(r(i)), '(CMB)'	
- do i=2, nla+1
-     write(99,*) ' ', i, ':', to_sp(r(i))
- enddo
- i=nla+2
- write(99,*) ' ', i, ':', to_sp(r(i)), '(External surface)' 
+!
+ do i=0,nla
+    if(i==0) then
+       write(99,*) ' ', i, ':', to_sp(r(i)), '(Planet center)'
+    elseif(i==nla) then
+       write(99,*) ' ', i, ':', to_sp(r(i)), '(External surface)' 
+    elseif(i==1) then
+       write(99,*) ' ', i, ':', to_sp(r(i)), '(CMB)'
+    else
+       write(99,*) ' ', i, ':', to_sp(r(i))
+    end if
+ end do
+!
 !
 !
  write(99,*) ' '
  write(99,*) ' NORMALIZED Rigidity of the layers from bottom to top' 
- i=0
- write(99,*) ' ', i, ':', to_sp(mu(i)), '(Core)'
- do i=1, nla
-     write(99,*) ' ', i, ':', to_sp(mu(i))  
- enddo
- i=nla+1
- write(99,*) ' ', i, ':', to_sp(mu(i)), '(Lithosphere)'	
+!
+!
+ do i=1,nla
+    if(i==1) then
+       write(99,*) ' ', i, ':', to_sp(mu(i)), '(Core)'
+    elseif(i==nla) then
+       write(99,*) ' ', i, ':', to_sp(mu(i)), '(Lithosphere)'
+    else
+       write(99,*) ' ', i, ':', to_sp(mu(i))   
+    end if
+ end do
+!
 !
 !
  write(99,*) ' '
  write(99,*) ' NORMALIZED Density of the layers from bottom to top' 
- i=0
- write(99,*) ' ', i, ':', to_sp(mu(i)), '(Core)'
- do i=1, NLA
-     write(99,*) ' ', i, ':', to_sp(mu(i))    
- enddo	
- i=NLA+1
- write(99,*) ' ', i, ':', to_sp(mu(i)), '(Lithosphere)'
+!
+!
+ do i=1,nla
+    if(i==1) then
+       write(99,*) ' ', i, ':', to_sp(rho(i)), '(Core)'
+    elseif(i==nla) then
+       write(99,*) ' ', i, ':', to_sp(rho(i)), '(Lithosphere)'
+    else
+       write(99,*) ' ', i, ':', to_sp(rho(i))    
+    end if
+ end do
+!
 !
 !
  write(99,*) ' '
- write(99,*) ' NORMALIZED Viscosity of the layers from bottom to top, (Pa.s)'	
- i=0
- write(99,*) ' ', i, ':', to_dp(eta(i)), '(Core)'
- do i=1, NLA
-     write(99,*) ' ', i, ':', to_dp(eta(i))    
- enddo	
- i=NLA+1
- write(99,*) ' ', i, ':', to_dp(eta(i)), '(Lithosphere)'
+ write(99,*) ' NORMALIZED Viscosity of the layers from bottom to top'
+!
+ do i=1,nla
+    if(i==1) then
+       write(99,*) ' ', i, ':', to_dp(eta(i)), '(Core)'
+    elseif(i==nla) then
+       write(99,*) ' ', i, ':', to_dp(eta(i)), ' (Lithosphere)'
+    else
+       write(99,*) ' ', i, ':', to_dp(eta(i))    
+    end if
+ end do
+!
 !
 !
  write(99,*) ' '
@@ -236,15 +270,20 @@ implicit none
 !
  write(99,*) ' '
  write(99,*) ' NORMALIZED Gravity at the interfaces from bottom to top'
- i=0
- write(99,*) ' ', i, ':', to_sp((r(i)*r0))/1000, to_sp(gra(i)), '(Planet center)'
- i=1
- write(99,*) ' ', i, ':', to_sp((r(i)*r0))/1000, to_sp(gra(i)), '(CMB)'	
- do i=2, NLA+1
-     write(99,*) ' ', i, ':', to_sp((r(i)*r0))/1000, to_sp(gra(i))
- enddo
- i=NLA+2
- write(99,*) ' ', i, ':', to_sp((r(i)*r0))/1000, to_sp(gra(i)), '(External surface)'	 
+!
+ do i=0,nla
+    if(i==0) then
+       write(99,*) ' ', i, ':', to_sp((r(i)*r0))/1000, to_sp(gra(i)), '(Planet center)'
+    elseif(i==nla) then
+       write(99,*) ' ', i, ':', to_sp((r(i)*r0))/1000, to_sp(gra(i)), '(External surface)'	 
+    elseif(i==1) then
+       write(99,*) ' ', i, ':', to_sp((r(i)*r0))/1000, to_sp(gra(i)), '(CMB)'	
+    else
+       write(99,*) ' ', i, ':', to_sp((r(i)*r0))/1000, to_sp(gra(i))
+    end if
+ end do
+!
+!
 !
 !
  end if

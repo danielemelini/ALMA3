@@ -5,7 +5,8 @@
 !
 ! Initial version DM February 24, 2020
 ! Modified DM June 11, 2020 - Burgers (and Andrade) rheologies
-!
+! Modified Oct  5, 2023     - changed the numbering scheme for the layers
+!                             added automatic detection of headers
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
 !
@@ -16,7 +17,7 @@ use general_parameters
 implicit none
 !
  integer :: i,j,k,n
- integer, parameter :: nh=4            ! Number of header lines in rheology file
+ integer :: nh                    ! Number of header lines in rheology file
  character(20) :: buffer(10)
  character(3)  :: code    
 !
@@ -27,24 +28,24 @@ implicit none
  open(10,file=trim(file_rheol),status='old')
 !
 ! ----- Verify if the number of lines is consistent with the number of layers
- call count_rows(10,n)
- if( n.ne.(nla+2+nh) ) then
+ call line_count(10,nh,n)
+ if( n.ne.(nla+nh) ) then
     write(*,*) " - ERROR: Number of rows in '"//trim(file_rheol)//"' is not consistent with"
-    write(*,*) "          the number of mantle layers."
+    write(*,*) "          the number of layers in the model."
     stop
  end if
 ! 
 !
 ! ----- Allocate dynamic arrays
- allocate(r  (0:nla+2))
- allocate(gra(0:nla+2))
- allocate(rho(0:nla+1))
- allocate(mu (0:nla+1))
- allocate(eta(0:nla+1))
- allocate(irheol(0:nla+1))
- allocate(par(0:nla+1,5))
+ allocate(r  (0:nla))
+ allocate(gra(0:nla))
+ allocate(rho(1:nla))
+ allocate(mu (1:nla))
+ allocate(eta(1:nla))
+ allocate(irheol(1:nla))
+ allocate(par(1:nla,5))
 !
- allocate(mlayer(0:nla+1))
+ allocate(mlayer(1:nla))
 !
 !
 ! ----- Read the rheology codes for each layer
@@ -54,7 +55,7 @@ implicit none
     read(10,*)
  end do
 !
- do i=nla+1,0,-1
+ do i=nla,1,-1
 !
     read(10,*) (buffer(j), j=1,5)
 !
@@ -92,7 +93,7 @@ implicit none
 !  
  r(0)=to_fm('0.0')
 !
- do i=nla+1,0,-1
+ do i=nla,1,-1
 !
      if (irheol(i)<5) then
 !
@@ -108,11 +109,11 @@ implicit none
 !
         read(10,*) (buffer(j), j=1,6)
         par(i,1)=to_fm(buffer(6))
-		par(i,2)=gamma(par(i,1)+1)
+        par(i,2)=gamma(par(i,1)+1)
 !    
     end if        
 !
-     r(i+1) = to_fm(buffer(1))
+     r(i)   = to_fm(buffer(1))
      rho(i) = to_fm(buffer(2))
      mu (i) = to_fm(buffer(3))
      eta(i) = to_fm(buffer(4))
@@ -125,9 +126,8 @@ implicit none
 !
 ! ----- Compute mass of the planet
 !
- mlayer(0) = rho(0) * r(1)**3
- do i=1,nla+1
-    mlayer(i) = rho(i) * ( r(i+1)**3 - r(i)**3 )
+ do i=1,nla
+    mlayer(i) = rho(i) * ( r(i)**3 - r(i-1)**3 )
  end do
  mlayer = mlayer * to_fm('4.0') / to_fm('3.0') * pi
 !
@@ -137,34 +137,11 @@ implicit none
 ! ----- Compute gravity at the interface boundaries
 !
  gra(0)=to_fm('0.0')
- do i=1, nla+2
-     gra(i) = gnt * sum(mlayer(0:(i-1))) / r(i)**2
+ do i=1, nla
+     gra(i) = gnt * sum(mlayer(1:i)) / r(i)**2
  end do
 !
 !
 !
 !
 end subroutine build_model
-!
-!
-!
-!
-    subroutine count_rows(lun,n)
-    implicit none
-!
-! --- Returns as N the number of rows in text file opened at LUN
-!     DM 28.04.2014
-!
-    integer lun,n
-!
-    rewind(lun)
-!
-    n=0
-901 read(lun,*,end=902)
-    n=n+1
-    go to 901
-    902 continue
-!
-    return
-!
-    end subroutine count_rows

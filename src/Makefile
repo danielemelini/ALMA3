@@ -19,7 +19,8 @@ ALMA_OBJS=alma.o \
 	  complex_rigidity.o \
 	  lu.o \
 	  salzer_weights.o \
-          print_logo.o
+          print_logo.o \
+	  line_count.o
 #
 FMLIB_OBJS=fmsave.o fm.o fmzm90.o
 #

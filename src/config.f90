@@ -74,9 +74,8 @@ implicit none
  call read_data_line(90,buffer)  ;   read(buffer,*) tau
 !
  call read_data_line(90,buffer)  ;   read(buffer,*) nla 
- nla=nla-2
- if (nla.lt.0) then
-    write(*,*) " - ERROR: The model must contain at least two layers"
+ if (nla.le.0) then
+    write(*,*) " - ERROR: The model must contain at least one layer"
 	stop
  end if
 !

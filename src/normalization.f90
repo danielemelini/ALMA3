@@ -5,6 +5,7 @@
 !
 ! Initial version DM February 24, 2020
 ! Modified DM June 22, 2020 - changed normalization scale for mu to MAXVAL(mu)
+! Modified Oct  5, 2023 changed the numbering scheme for the layers
 !
 ! +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 !
@@ -21,8 +22,9 @@ implicit none
 !
 ! ------- Reference scales
 !
- r0     = r(nla+2)
- rho0   = rho(1) 
+ r0     = r(nla)
+ rho0   = maxval(rho) 
+!rho0   = rho(1) 
 !mu0    = mu(1)
  mu0    = maxval(mu)
  t0     = to_fm('1000') * to_fm('365.25') * to_fm('24') * to_fm('3600')
